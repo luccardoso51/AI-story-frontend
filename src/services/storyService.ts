@@ -29,6 +29,11 @@ export const storyService = {
     return response.data;
   },
 
+  generateStoryCover: async (id: string): Promise<Story> => {
+    const response = await api.post(`/illustrations/cover/${id}`);
+    return response.data;
+  },
+
   createStoryData: async (input: StoryInput): Promise<Story> => {
     const response = await api.post('/stories', input);
     return response.data;

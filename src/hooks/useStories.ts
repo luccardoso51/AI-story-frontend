@@ -36,7 +36,13 @@ export function useGenerateStory(input: StoryInput) {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: (input: StoryInput) => storyService.generateStory(input),
+    mutationFn: async (input: StoryInput) => {
+      const story = await storyService.generateStory(input);
+      const cover = await storyService.generateStoryCover(story.id);
+      console.log('story', story);
+      console.log('cover', cover);
+      return { ...story, cover };
+    },
     onSuccess: newStory => {
       // Update stories lists in cache for both sort orders
       queryClient.setQueryData<Story[]>(

@@ -31,9 +31,6 @@ export default function StoryLibraryScreen() {
     setImageErrors(prev => ({ ...prev, [id]: true }));
   };
 
-  // For debugging
-  console.log('Stories data:', stories);
-
   if (isLoading) {
     return (
       <View style={styles.container}>
