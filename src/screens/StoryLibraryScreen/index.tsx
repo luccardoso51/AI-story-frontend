@@ -8,9 +8,11 @@ import {
 } from 'react-native';
 import { useStories } from '../../hooks/useStories';
 import { useState } from 'react';
-import { Story } from '../../types';
-
+import { colors } from '../../theme/colors';
+import { StoryLibraryScreenNavigationProp } from '../../types/navigation';
+import { useNavigation } from '@react-navigation/native';
 export default function StoryLibraryScreen() {
+  const navigation = useNavigation<StoryLibraryScreenNavigationProp>();
   // State for sort order
   const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
 
@@ -60,6 +62,8 @@ export default function StoryLibraryScreen() {
       <FlatList
         data={stories}
         keyExtractor={item => item.id}
+        horizontal={true}
+        style={{ flex: 1, width: '100%' }}
         renderItem={({ item }) => (
           <View style={styles.storyCard}>
             <Text style={styles.storyTitle}>{item.title}</Text>
@@ -104,7 +108,6 @@ export default function StoryLibraryScreen() {
                             handleImageError(uniqueKey, e.nativeEvent.error)
                           }
                         />
-                        <Text style={styles.imageUrl}>{illustration.url}</Text>
                       </View>
                     )}
                   </View>
@@ -113,10 +116,18 @@ export default function StoryLibraryScreen() {
             )}
 
             <Text style={styles.storyDetail}>Age Range: {item.ageRange}</Text>
-            <Text style={styles.storyContent}>{item.content}</Text>
-            <Text style={styles.storyDate}>
+            {/* <Text style={styles.storyContent}>{item.content}</Text> */}
+            {/* <Text style={styles.storyDate}>
               Created: {new Date(item.createdAt).toLocaleString()}
-            </Text>
+            </Text> */}
+            <TouchableOpacity
+              style={styles.readStoryButton}
+              onPress={() =>
+                navigation.navigate('ReadStory', { content: item })
+              }
+            >
+              <Text style={styles.readStoryButtonText}>Read Story</Text>
+            </TouchableOpacity>
           </View>
         )}
       />
@@ -142,14 +153,16 @@ const styles = StyleSheet.create({
   },
   storyCard: {
     padding: 16,
-    backgroundColor: 'white',
+    backgroundColor: colors.almond,
     borderRadius: 8,
     marginBottom: 12,
     elevation: 2,
+    width: 300,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 4
+    shadowRadius: 4,
+    marginRight: 16
   },
   storyTitle: {
     fontSize: 18,
@@ -161,7 +174,7 @@ const styles = StyleSheet.create({
   },
   storyImage: {
     width: '100%',
-    height: 500,
+    height: 300,
     borderRadius: 8,
     backgroundColor: '#f0f0f0'
   },
@@ -190,5 +203,16 @@ const styles = StyleSheet.create({
     color: '#666',
     marginTop: 8,
     textAlign: 'right'
+  },
+  readStoryButton: {
+    backgroundColor: colors.bogota,
+    marginTop: 16,
+    borderRadius: 6,
+    padding: 5
+  },
+  readStoryButtonText: {
+    color: 'white',
+    fontSize: 14,
+    textAlign: 'center'
   }
 });

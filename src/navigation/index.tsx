@@ -4,6 +4,7 @@ import HomeScreen from '../screens/HomeScreen';
 import GenerateStoryScreen from '../screens/GenerateStoryScreen';
 import StoryLibraryScreen from '../screens/StoryLibraryScreen';
 import { RootStackParamList } from '../types/navigation';
+import ReadStoryScreen from '../screens/ReadStoryScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -24,6 +25,11 @@ export default function Navigation() {
         name="StoryLibrary"
         component={StoryLibraryScreen}
         options={{ title: 'My Stories' }}
+      />
+      <Stack.Screen
+        name="ReadStory"
+        component={ReadStoryScreen as React.ComponentType<any>}
+        options={{ title: 'Read Story' }}
       />
     </Stack.Navigator>
   );

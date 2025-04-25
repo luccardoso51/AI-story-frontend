@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigation';
 import { useTheme, ThemeProps } from '../../context/theme';
+import { colors } from '../../theme/colors';
 
 // Define props type for HomeScreen
 type HomeScreenProps = {
@@ -44,7 +45,7 @@ const styles = (theme: ThemeProps) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.backgroundColor,
+      backgroundColor: colors.cotton,
       alignItems: 'center'
     },
     titleContainer: {
