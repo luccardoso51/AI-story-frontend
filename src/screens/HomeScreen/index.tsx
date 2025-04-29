@@ -1,8 +1,16 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  FlatList
+} from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigation';
 import { useTheme, ThemeProps } from '../../context/theme';
 import { colors } from '../../theme/colors';
+import { useStories } from '../../hooks/useStories';
 
 // Define props type for HomeScreen
 type HomeScreenProps = {
@@ -12,12 +20,68 @@ type HomeScreenProps = {
 export default function HomeScreen({ navigation }: HomeScreenProps) {
   const theme = useTheme();
   const style = styles(theme);
+  const { data: stories } = useStories();
 
   return (
     <View style={style.container}>
       {/* Title at the top */}
-      <View style={style.titleContainer}>
-        <Text style={style.title}>AI Story Generator</Text>
+
+      <View style={style.welcomeView}>
+        <Text style={style.welcomeText}>Hello, Lucas Cardoso</Text>
+      </View>
+
+      <View style={style.latestStoriesContainer}>
+        <Text
+          style={{
+            fontSize: 16,
+            fontWeight: 'bold',
+            marginBottom: 10,
+            color: theme.colors.cotton,
+            paddingHorizontal: 20
+          }}
+        >
+          Your latest stories
+        </Text>
+        <FlatList
+          data={stories?.slice(0, 4)}
+          horizontal={true}
+          maxToRenderPerBatch={2}
+          style={{
+            paddingHorizontal: 10
+          }}
+          renderItem={({ item }) => {
+            return (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'flex-start',
+                  paddingHorizontal: 10
+                }}
+              >
+                <Image
+                  source={{ uri: item.illustrations[0].url }}
+                  style={{
+                    width: 150,
+                    height: 150,
+                    borderRadius: 16,
+                    resizeMode: 'cover'
+                  }}
+                />
+                <Text
+                  style={{
+                    fontSize: 12,
+                    maxWidth: 150,
+                    color: theme.colors.cotton,
+                    paddingTop: 5
+                  }}
+                  numberOfLines={1}
+                >
+                  {item.title}
+                </Text>
+              </View>
+            );
+          }}
+        />
       </View>
 
       {/* Navigation buttons in the center */}
@@ -45,7 +109,7 @@ const styles = (theme: ThemeProps) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: colors.cotton,
+      backgroundColor: colors.pistachio,
       alignItems: 'center'
     },
     titleContainer: {
@@ -71,7 +135,9 @@ const styles = (theme: ThemeProps) =>
     },
     button: {
       width: '70%',
-      backgroundColor: theme.colors.almond,
+      backgroundColor: theme.colors.bogota,
+      borderWidth: 1,
+      borderColor: theme.colors.cotton,
       padding: 15,
       borderRadius: 8,
       alignItems: 'center'
@@ -79,6 +145,21 @@ const styles = (theme: ThemeProps) =>
     buttonText: {
       fontSize: theme.fontSizes.md,
       fontFamily: theme.fonts.body,
+      color: theme.colors.cotton
+    },
+    welcomeView: {
+      width: '100%',
+      backgroundColor: colors.pistachio,
+      padding: 20
+    },
+    welcomeText: {
+      fontSize: theme.fontSizes.md,
+      fontFamily: theme.fonts.body,
       color: theme.colors.espresso
+    },
+    latestStoriesContainer: {
+      width: '100%',
+      backgroundColor: colors.iris,
+      paddingVertical: 10
     }
   });
