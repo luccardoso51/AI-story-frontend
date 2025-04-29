@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Image
 } from 'react-native';
-import { useStories } from '../../hooks/useStories';
+import { useDeleteStory, useStories } from '../../hooks/useStories';
 import { useState } from 'react';
 import { colors } from '../../theme/colors';
 import { StoryLibraryScreenNavigationProp } from '../../types/navigation';
@@ -22,6 +22,9 @@ export default function StoryLibraryScreen() {
   // Use the hook with sort order
   const { data: stories, isLoading, error } = useStories(sortOrder);
 
+  // Create a mutation for deleting stories
+  const deleteStoryMutation = useDeleteStory();
+
   // Toggle sort order
   const toggleSortOrder = () => {
     setSortOrder(current => (current === 'newest' ? 'oldest' : 'newest'));
@@ -31,6 +34,15 @@ export default function StoryLibraryScreen() {
   const handleImageError = (id: string, errorMsg: string) => {
     console.error(`Image error for ${id}:`, errorMsg);
     setImageErrors(prev => ({ ...prev, [id]: true }));
+  };
+
+  const handleDeleteStory = async (id: string) => {
+    try {
+      // Pass the ID to the mutation function
+      deleteStoryMutation.mutate(id);
+    } catch (error) {
+      console.error('Error deleting story:', error);
+    }
   };
 
   if (isLoading) {
@@ -127,6 +139,9 @@ export default function StoryLibraryScreen() {
               }
             >
               <Text style={styles.readStoryButtonText}>Read Story</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleDeleteStory(item.id)}>
+              <Text>Delete Story</Text>
             </TouchableOpacity>
           </View>
         )}

@@ -32,6 +32,23 @@ export function useStory(id: string) {
   });
 }
 
+export function useDeleteStory() {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: async (id: string) => {
+      await storyService.deleteStory(id);
+
+      return { success: true };
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['stories'] });
+    }
+  });
+
+  return mutation;
+}
+
 export function useGenerateStory(input: StoryInput) {
   const queryClient = useQueryClient();
 
@@ -39,8 +56,7 @@ export function useGenerateStory(input: StoryInput) {
     mutationFn: async (input: StoryInput) => {
       const story = await storyService.generateStory(input);
       const cover = await storyService.generateStoryCover(story.id);
-      console.log('story', story);
-      console.log('cover', cover);
+
       return { ...story, cover };
     },
     onSuccess: newStory => {

@@ -37,5 +37,11 @@ export const storyService = {
   createStoryData: async (input: StoryInput): Promise<Story> => {
     const response = await api.post('/stories', input);
     return response.data;
+  },
+
+  deleteStory: async (id: string): Promise<void> => {
+    const response = await api.delete(`/stories/${id}`);
+
+    return response.data;
   }
 };
