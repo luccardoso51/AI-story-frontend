@@ -50,6 +50,13 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
             paddingHorizontal: 10
           }}
           renderItem={({ item }) => {
+            // Check if illustrations exist and have valid data
+            const hasValidImage =
+              item.illustrations &&
+              Array.isArray(item.illustrations) &&
+              item.illustrations.length > 0 &&
+              item.illustrations[0]?.url;
+
             return (
               <View
                 style={{
@@ -58,15 +65,30 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
                   paddingHorizontal: 10
                 }}
               >
-                <Image
-                  source={{ uri: item.illustrations[0].url }}
-                  style={{
-                    width: 150,
-                    height: 150,
-                    borderRadius: 16,
-                    resizeMode: 'cover'
-                  }}
-                />
+                {hasValidImage ? (
+                  <Image
+                    source={{ uri: item.illustrations[0].url }}
+                    style={{
+                      width: 150,
+                      height: 150,
+                      borderRadius: 16,
+                      resizeMode: 'cover'
+                    }}
+                  />
+                ) : (
+                  <View
+                    style={{
+                      width: 150,
+                      height: 150,
+                      borderRadius: 16,
+                      backgroundColor: '#f0f0f0',
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }}
+                  >
+                    <Text style={{ color: '#666' }}>No image</Text>
+                  </View>
+                )}
                 <Text
                   style={{
                     fontSize: 12,

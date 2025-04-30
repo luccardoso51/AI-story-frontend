@@ -56,8 +56,9 @@ export function useGenerateStory(input: StoryInput) {
     mutationFn: async (input: StoryInput) => {
       const story = await storyService.generateStory(input);
       const cover = await storyService.generateStoryCover(story.id);
+      const audio = await storyService.generateStoryAudio(story.id);
 
-      return { ...story, cover };
+      return { ...story, cover, audio };
     },
     onSuccess: newStory => {
       // Update stories lists in cache for both sort orders

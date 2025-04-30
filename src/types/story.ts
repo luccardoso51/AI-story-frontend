@@ -9,6 +9,7 @@ export interface Story {
   settings: string;
   createdAt: string;
   illustrations: Illustration[];
+  audio: Audio;
 }
 
 export interface StoryInput {
@@ -25,5 +26,13 @@ export interface Illustration {
   sequence: number;
   storyId: string;
   story: Story;
+  createdAt: string;
+}
+
+export interface Audio {
+  id: string;
+  url: string;
+  s3Key: string;
+  storyId: string;
   createdAt: string;
 }

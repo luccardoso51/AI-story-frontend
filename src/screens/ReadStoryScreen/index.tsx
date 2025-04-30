@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Text,
   StyleSheet,
   ScrollView,
   ImageBackground,
-  View
+  View,
+  TouchableOpacity,
+  Alert
 } from 'react-native';
-import { Story } from '../../types';
-import { RouteProp } from '@react-navigation/native';
+import {
+  RouteProp,
+  useNavigation,
+  useIsFocused
+} from '@react-navigation/native';
 import { RootStackParamList } from '../../types/navigation';
+import { Audio } from 'expo-av';
 
 type ReadStoryScreenRouteProp = RouteProp<RootStackParamList, 'ReadStory'>;
 
@@ -18,6 +24,165 @@ interface ReadStoryScreenProps {
 
 const ReadStoryScreen = ({ route }: ReadStoryScreenProps) => {
   const { content } = route.params;
+  const [sound, setSound] = useState<Audio.Sound | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const navigation = useNavigation();
+  const isFocused = useIsFocused();
+
+  // Cleanup function to stop and unload sound
+  const stopAndUnloadSound = async () => {
+    try {
+      if (sound) {
+        console.log('Stopping and unloading sound');
+        await sound.stopAsync();
+        await sound.unloadAsync();
+        setSound(null);
+        setIsPlaying(false);
+      }
+    } catch (error) {
+      console.error('Error stopping sound:', error);
+    }
+  };
+
+  // Monitor focus changes - stop sound when screen is not focused
+  useEffect(() => {
+    if (!isFocused && sound) {
+      console.log('Screen lost focus, stopping sound');
+      stopAndUnloadSound();
+    }
+  }, [isFocused]);
+
+  // Monitor navigation state changes
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', e => {
+      if (sound) {
+        console.log('Navigation event: beforeRemove, stopping sound');
+        stopAndUnloadSound();
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation, sound]);
+
+  // Clean up when content ID changes (different story)
+  useEffect(() => {
+    return () => {
+      console.log('Content changed or component unmounting, cleaning up');
+      stopAndUnloadSound();
+    };
+  }, [content.id]);
+
+  // Handle hardware back button and app state changes
+  useEffect(() => {
+    const handleAppStateChange = async (nextAppState: string) => {
+      if (nextAppState !== 'active' && sound) {
+        console.log('App state changed, stopping sound');
+        await stopAndUnloadSound();
+      }
+    };
+
+    // Set up listener for app state
+    const subscription = Audio.setAudioModeAsync({
+      playsInSilentModeIOS: true,
+      staysActiveInBackground: false, // Don't play in background
+      shouldDuckAndroid: true
+    });
+
+    return () => {
+      // Clean up on unmount
+      stopAndUnloadSound();
+    };
+  }, []);
+
+  async function playSound() {
+    try {
+      // If there's already a sound playing, stop it first
+      if (sound) {
+        await stopAndUnloadSound();
+      }
+
+      console.log('Loading Sound from URL:', content.audio?.url);
+
+      if (!content.audio?.url) {
+        console.error('Audio URL is undefined or null');
+        Alert.alert('Error', 'Audio file not available');
+        return;
+      }
+
+      // Request audio permissions first
+      const { status } = await Audio.requestPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert(
+          'Permission Denied',
+          'Audio permissions are required to play the story'
+        );
+        return;
+      }
+
+      // Set audio mode
+      await Audio.setAudioModeAsync({
+        playsInSilentModeIOS: true,
+        staysActiveInBackground: false, // Changed to false to stop when app is in background
+        shouldDuckAndroid: true
+      });
+
+      const { sound: newSound } = await Audio.Sound.createAsync(
+        {
+          uri: content.audio.url
+        },
+        { shouldPlay: true },
+        status => {
+          if ('isLoaded' in status && status.isLoaded) {
+            setIsPlaying(status.isPlaying);
+
+            // When sound finishes playing naturally
+            if (!status.isPlaying && status.didJustFinish) {
+              console.log('Sound finished playing naturally');
+              setIsPlaying(false);
+            }
+          } else {
+            setIsPlaying(false);
+          }
+        }
+      );
+
+      setSound(newSound);
+      console.log('Playing Sound');
+
+      const playbackStatus = await newSound.playAsync();
+      console.log('Playback started with status:', playbackStatus);
+    } catch (error) {
+      console.error('Error playing sound:', error);
+      Alert.alert('Playback Error', 'Could not play the audio file');
+    }
+  }
+
+  async function stopSound() {
+    if (sound) {
+      await stopAndUnloadSound();
+    }
+  }
+
+  // Render content with background image or white background
+  const renderContent = () => (
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.contentWrapper}>
+        <Text style={styles.title}>{content.title}</Text>
+
+        {content.audio && (
+          <TouchableOpacity
+            onPress={isPlaying ? stopSound : playSound}
+            style={styles.audioButton}
+          >
+            <Text style={styles.audioButtonText}>
+              {isPlaying ? 'Stop Audio' : 'Play Audio'}
+            </Text>
+          </TouchableOpacity>
+        )}
+        <Text style={styles.content}>{content.content}</Text>
+      </View>
+    </ScrollView>
+  );
 
   // Check if there's a cover image available
   const hasCover =
@@ -25,16 +190,6 @@ const ReadStoryScreen = ({ route }: ReadStoryScreenProps) => {
     Array.isArray(content.illustrations) &&
     content.illustrations.length > 0 &&
     content.illustrations[0]?.url;
-
-  // Render content with background image or white background
-  const renderContent = () => (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.contentWrapper}>
-        <Text style={styles.title}>{content.title}</Text>
-        <Text style={styles.content}>{content.content}</Text>
-      </View>
-    </ScrollView>
-  );
 
   return hasCover ? (
     <ImageBackground
@@ -83,6 +238,17 @@ const styles = StyleSheet.create({
   content: {
     fontSize: 16,
     lineHeight: 24
+  },
+  audioButton: {
+    backgroundColor: '#4A90E2',
+    padding: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 16
+  },
+  audioButtonText: {
+    color: 'white',
+    fontWeight: 'bold'
   }
 });
 

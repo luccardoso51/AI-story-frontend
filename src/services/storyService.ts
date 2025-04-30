@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Story, StoryInput } from '../types/story';
+import { Audio, Story, StoryInput } from '../types/story';
 
 // It might be better to move the API instance to a separate file for better organization and reusability.
 const api = axios.create({
@@ -31,6 +31,11 @@ export const storyService = {
 
   generateStoryCover: async (id: string): Promise<Story> => {
     const response = await api.post(`/illustrations/cover/${id}`);
+    return response.data;
+  },
+
+  generateStoryAudio: async (id: string): Promise<Audio> => {
+    const response = await api.post(`/stories/generate-audio/${id}`);
     return response.data;
   },
 

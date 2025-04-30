@@ -35,8 +35,15 @@ export default function GenerateStoryScreen() {
 
   // Handle form submission
   const handleSubmit = async () => {
-    await generateStory.mutateAsync(form);
-    navigation.navigate('StoryLibrary');
+    try {
+      await generateStory.mutateAsync(form);
+    } catch (error) {
+      console.error('Error generating story:', error);
+    } finally {
+      if (generateStory.isSuccess) {
+        navigation.navigate('StoryLibrary');
+      }
+    }
   };
 
   // Handle adding a new character
@@ -87,7 +94,7 @@ export default function GenerateStoryScreen() {
                 form.ageRange === age && style.ageRangeButtonSelected
               ]}
               onPress={() => setForm(prev => ({ ...prev, ageRange: age }))}
-              disabled={isPending}
+              disabled={isPending || generateStory.isPending}
             >
               <Text
                 style={[
