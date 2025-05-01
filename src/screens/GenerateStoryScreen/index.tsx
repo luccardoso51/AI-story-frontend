@@ -37,12 +37,9 @@ export default function GenerateStoryScreen() {
   const handleSubmit = async () => {
     try {
       await generateStory.mutateAsync(form);
+      navigation.navigate('StoryLibrary');
     } catch (error) {
       console.error('Error generating story:', error);
-    } finally {
-      if (generateStory.isSuccess) {
-        navigation.navigate('StoryLibrary');
-      }
     }
   };
 
@@ -253,7 +250,8 @@ const styles = (theme: ThemeProps) =>
       gap: 4
     },
     characterChipText: {
-      fontSize: 14
+      fontSize: 14,
+      color: 'white'
     },
     removeCharacter: {
       fontSize: 18,
@@ -272,7 +270,7 @@ const styles = (theme: ThemeProps) =>
       marginTop: 20
     },
     generateButtonDisabled: {
-      backgroundColor: '#99c9ff'
+      backgroundColor: theme.colors.almond
     },
     generateButtonText: {
       color: 'white',

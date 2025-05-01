@@ -15,6 +15,7 @@ import {
 } from '@react-navigation/native';
 import { RootStackParamList } from '../../types/navigation';
 import { Audio } from 'expo-av';
+import { colors } from '../../theme/colors';
 
 type ReadStoryScreenRouteProp = RouteProp<RootStackParamList, 'ReadStory'>;
 
@@ -175,7 +176,7 @@ const ReadStoryScreen = ({ route }: ReadStoryScreenProps) => {
             style={styles.audioButton}
           >
             <Text style={styles.audioButtonText}>
-              {isPlaying ? 'Stop Audio' : 'Play Audio'}
+              {isPlaying ? 'Stop Audio' : 'Listen to Story'}
             </Text>
           </TouchableOpacity>
         )}
@@ -219,7 +220,7 @@ const styles = StyleSheet.create({
     padding: 16
   },
   contentWrapper: {
-    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     borderRadius: 12,
     padding: 20,
     marginVertical: 20,
@@ -233,14 +234,22 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 16,
-    textAlign: 'center'
+    textAlign: 'center',
+    color: 'white',
+    textShadowColor: 'rgba(255, 255, 255, 0.9)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 1
   },
   content: {
     fontSize: 16,
-    lineHeight: 24
+    lineHeight: 24,
+    color: 'white',
+    textShadowColor: 'rgba(255, 255, 255, 0.9)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 1
   },
   audioButton: {
-    backgroundColor: '#4A90E2',
+    backgroundColor: colors.iris,
     padding: 10,
     borderRadius: 8,
     alignItems: 'center',

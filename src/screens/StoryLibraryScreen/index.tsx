@@ -11,6 +11,7 @@ import { useState } from 'react';
 import { colors } from '../../theme/colors';
 import { StoryLibraryScreenNavigationProp } from '../../types/navigation';
 import { useNavigation } from '@react-navigation/native';
+import { fontSizes } from '../../theme/fonts';
 export default function StoryLibraryScreen() {
   const navigation = useNavigation<StoryLibraryScreenNavigationProp>();
   // State for sort order
@@ -140,9 +141,11 @@ export default function StoryLibraryScreen() {
             >
               <Text style={styles.readStoryButtonText}>Read Story</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleDeleteStory(item.id)}>
-              <Text>Delete Story</Text>
-            </TouchableOpacity>
+            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+              <TouchableOpacity onPress={() => handleDeleteStory(item.id)}>
+                <Text style={styles.deleteStoryButtonText}>Delete Story</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         )}
       />
@@ -221,13 +224,19 @@ const styles = StyleSheet.create({
   },
   readStoryButton: {
     backgroundColor: colors.bogota,
-    marginTop: 16,
+    marginVertical: 16,
     borderRadius: 6,
-    padding: 5
+    padding: 5,
+    paddingVertical: 10
   },
   readStoryButtonText: {
     color: 'white',
     fontSize: 14,
-    textAlign: 'center'
+    textAlign: 'center',
+    fontWeight: 'bold'
+  },
+  deleteStoryButtonText: {
+    color: colors.espresso,
+    fontSize: fontSizes.xs
   }
 });
