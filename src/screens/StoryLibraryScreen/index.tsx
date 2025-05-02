@@ -4,7 +4,8 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
-  Image
+  Image,
+  ScrollView
 } from 'react-native';
 import { useDeleteStory, useStories } from '../../hooks/useStories';
 import { useState } from 'react';
@@ -64,7 +65,7 @@ export default function StoryLibraryScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       {/* Sort toggle button */}
       <TouchableOpacity style={styles.sortButton} onPress={toggleSortOrder}>
         <Text style={styles.sortButtonText}>
@@ -149,7 +150,7 @@ export default function StoryLibraryScreen() {
           </View>
         )}
       />
-    </View>
+    </ScrollView>
   );
 }
 
@@ -159,14 +160,13 @@ const styles = StyleSheet.create({
     padding: 16
   },
   sortButton: {
-    backgroundColor: '#007AFF',
     padding: 10,
     borderRadius: 8,
     marginBottom: 16,
     alignItems: 'center'
   },
   sortButtonText: {
-    color: 'white',
+    color: colors.bogota,
     fontWeight: '600'
   },
   storyCard: {
@@ -226,7 +226,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bogota,
     marginVertical: 16,
     borderRadius: 6,
-    padding: 5,
     paddingVertical: 10
   },
   readStoryButtonText: {
@@ -237,6 +236,8 @@ const styles = StyleSheet.create({
   },
   deleteStoryButtonText: {
     color: colors.espresso,
-    fontSize: fontSizes.xs
+    fontSize: fontSizes.xs,
+    textAlign: 'center',
+    marginBottom: 0
   }
 });

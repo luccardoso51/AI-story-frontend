@@ -1,6 +1,7 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Story } from '../types';
 export type RootStackParamList = {
+  MainStack: undefined;
   Home: undefined;
   StoryLibrary: undefined;
   GenerateStory: undefined;
@@ -9,7 +10,7 @@ export type RootStackParamList = {
 
 export type HomeScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
-  'Home'
+  'MainStack'
 >;
 
 export type GenerateStoryScreenNavigationProp = NativeStackNavigationProp<
