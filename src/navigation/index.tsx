@@ -8,7 +8,7 @@ import StoryLibraryScreen from '../screens/StoryLibraryScreen';
 import { RootStackParamList } from '../types/navigation';
 import ReadStoryScreen from '../screens/ReadStoryScreen';
 import { Ionicons } from '@expo/vector-icons';
-
+import { LoginScreen } from '../screens/LoginScreen';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const Tab = createBottomTabNavigator();
@@ -72,6 +72,11 @@ function MainTabs() {
 export default function Navigation() {
   return (
     <Stack.Navigator>
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="MainStack"
         component={MainTabs}

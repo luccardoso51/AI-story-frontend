@@ -6,6 +6,7 @@ export type RootStackParamList = {
   StoryLibrary: undefined;
   GenerateStory: undefined;
   ReadStory: { content: Story };
+  Login: undefined;
 };
 
 export type HomeScreenNavigationProp = NativeStackNavigationProp<
@@ -26,4 +27,9 @@ export type StoryLibraryScreenNavigationProp = NativeStackNavigationProp<
 export type ReadStoryScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   'ReadStory'
+>;
+
+export type LoginScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'Login'
 >;
