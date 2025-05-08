@@ -6,7 +6,9 @@ import {
   TouchableOpacity,
   TextInput,
   TouchableWithoutFeedback,
-  Keyboard
+  Keyboard,
+  Image,
+  ActivityIndicator
 } from 'react-native';
 import { colors } from '../../theme/colors';
 import { useNavigation } from '@react-navigation/native';
@@ -21,24 +23,44 @@ export function LoginScreen() {
     password: ''
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const [error, setError] = useState('');
 
   const handleSubmit = () => {
-    axios.post('http://localhost:8888/auth/login', form).then(res => {
-      const accessToken = res.data.accessToken;
-      AsyncStorage.setItem('accessToken', accessToken);
-      if (accessToken) {
-        navigation.navigate('MainStack');
-      } else {
-        setError('No access token');
-      }
-    });
+    try {
+      setIsLoading(true);
+      axios
+        .post('http://localhost:8888/auth/login', form)
+        .then(res => {
+          const accessToken = res.data.accessToken;
+          AsyncStorage.setItem('accessToken', accessToken);
+          if (accessToken) {
+            setIsLoading(false);
+
+            navigation.navigate('MainStack');
+          } else {
+            setError('Invalid credentials');
+          }
+        })
+        .catch(error => {
+          setError('Invalid credentials');
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    } catch (error) {
+      setError('Invalid credentials');
+    }
   };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        <Text>Login screen</Text>
+        <Image
+          source={require('../../assets/images/logo-story-craft.png')}
+          style={styles.logo}
+        />
         <View style={styles.inputContainer}>
           <View style={styles.inputWrapper}>
             <Text>Email</Text>
@@ -64,7 +86,11 @@ export function LoginScreen() {
         </View>
         {error && <Text style={styles.error}>{error}</Text>}
         <TouchableOpacity style={styles.loginButton} onPress={handleSubmit}>
-          <Text>Enter</Text>
+          {isLoading ? (
+            <ActivityIndicator size="small" color="white" />
+          ) : (
+            <Text style={styles.loginButtonText}>Enter</Text>
+          )}
         </TouchableOpacity>
       </View>
     </TouchableWithoutFeedback>
@@ -74,16 +100,21 @@ export function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.almond,
+    backgroundColor: colors.cotton,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20
+  },
+  logo: {
+    width: 200,
+    height: 200,
+    marginBottom: 20
   },
   input: {
     width: '100%',
     height: 40,
     borderWidth: 1,
-    borderColor: colors.espresso,
+    borderColor: colors.bogota,
     backgroundColor: 'white',
     borderRadius: 10,
     paddingHorizontal: 10,
@@ -105,6 +136,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bogota,
     borderRadius: 10,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop: 10
+  },
+  loginButtonText: {
+    color: 'white'
   }
 });

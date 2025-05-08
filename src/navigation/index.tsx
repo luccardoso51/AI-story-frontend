@@ -15,7 +15,13 @@ const Tab = createBottomTabNavigator();
 
 function MainTabs() {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarStyle: {
+          marginVertical: 10
+        }
+      }}
+    >
       <Tab.Screen
         name="Home"
         component={HomeScreen}
@@ -85,7 +91,10 @@ export default function Navigation() {
       <Stack.Screen
         name="ReadStory"
         component={ReadStoryScreen as React.ComponentType<any>}
-        options={{ title: 'Read Story' }}
+        options={{
+          title: 'Read Story',
+          headerBackTitleVisible: false
+        }}
       />
     </Stack.Navigator>
   );

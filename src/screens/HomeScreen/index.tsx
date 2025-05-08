@@ -29,11 +29,12 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
     <SafeAreaView style={style.container}>
       <ScrollView style={style.scrollView} showsVerticalScrollIndicator={false}>
         {/* Header with decorative elements */}
-        <View style={style.headerDecoration}>
-          <Text>Hello</Text>
-        </View>
 
         <View style={style.welcomeView}>
+          <Image
+            source={require('../../assets/images/logo-story-craft.png')}
+            style={{ width: 125, height: 125, alignSelf: 'center' }}
+          />
           <Text style={style.welcomeText}>Hello, Lucas Cardoso</Text>
           <View style={style.welcomeBanner}>
             <Text style={style.welcomeBannerText}>
@@ -169,7 +170,7 @@ const styles = (theme: ThemeProps) =>
     },
     latestStoriesContainer: {
       width: '100%',
-      backgroundColor: colors.espresso,
+      backgroundColor: colors.almond,
       paddingVertical: 20,
       borderTopLeftRadius: 25,
       borderTopRightRadius: 25,
@@ -179,7 +180,7 @@ const styles = (theme: ThemeProps) =>
       fontSize: 18,
       fontWeight: 'bold',
       marginBottom: 15,
-      color: theme.colors.cotton,
+      color: theme.colors.espresso,
       paddingHorizontal: 20
     },
     storiesList: {
@@ -214,7 +215,7 @@ const styles = (theme: ThemeProps) =>
     storyTitle: {
       fontSize: 14,
       maxWidth: 150,
-      color: theme.colors.cotton,
+      color: theme.colors.espresso,
       paddingTop: 8,
       fontWeight: '600'
     },
@@ -223,7 +224,7 @@ const styles = (theme: ThemeProps) =>
       alignItems: 'center'
     },
     emptyListText: {
-      color: theme.colors.cotton,
+      color: theme.colors.espresso,
       fontSize: 16,
       fontWeight: 'bold'
     },
@@ -237,7 +238,7 @@ const styles = (theme: ThemeProps) =>
       alignItems: 'center',
       marginVertical: 10,
       justifyContent: 'center',
-      backgroundColor: colors.bogota,
+      backgroundColor: colors.almond,
       borderRadius: 16,
       paddingVertical: 15,
       paddingHorizontal: 20,
@@ -249,10 +250,9 @@ const styles = (theme: ThemeProps) =>
     },
     welcomeBannerText: {
       fontSize: theme.fontSizes.md,
-      fontFamily: theme.fonts.heading,
-      color: theme.colors.almond,
-      textAlign: 'center',
-      fontWeight: 'bold'
+      fontFamily: theme.fonts.body,
+      color: theme.colors.bogota,
+      textAlign: 'center'
     },
     buttonContainer: {
       width: '100%',
@@ -261,7 +261,7 @@ const styles = (theme: ThemeProps) =>
       gap: 20,
       paddingHorizontal: 20,
       paddingVertical: 25,
-      backgroundColor: colors.espresso
+      backgroundColor: colors.almond
     },
     button: {
       width: '100%',
