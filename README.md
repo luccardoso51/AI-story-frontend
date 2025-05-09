@@ -22,15 +22,23 @@ _✨ Unleash your imagination with magical stories! ✨_
 - **Beautiful Illustrations**: Each story comes with AI-generated illustrations
 - **Story Library**: Save and access all your favorite stories
 - **User-Friendly Interface**: Designed with children and parents in mind
-- **Offline Reading**: Access your saved stories without an internet connection
+- **Story Audio**: Read or Listen to any story
 
 ## 📸 Screenshots
 
-<!-- Add your screenshots here -->
-
-<p align="center">
-  <i>Screenshots coming soon!</i>
-</p>
+<div align="center">
+  <p float="left">
+    <img src="./src/assets/images/Login Screen.png" width="200" />
+    <img src="./src/assets/images/Home page.png" width="200" /> 
+    <img src="./src/assets/images/Home page 2.png" width="200" />
+  </p>
+  
+  <p float="left">
+    <img src="./src/assets/images/Library Screen.png" width="200" />
+    <img src="./src/assets/images/Library Screen 2.png" width="200" />
+    <img src="./src/assets/images/Read Story Screen.png" width="200" />
+  </p>
+</div>
 
 ## 🚀 Technologies
 
@@ -87,10 +95,10 @@ yarn start
 
    - Access your previously created stories in the "Story Library"
    - Tap on any story to start reading
+   - Or **Listen** to the story
 
-3. **Save and Share**:
+3. **Save**:
    - All stories are automatically saved to your library
-   - Share stories with friends and family
 
 ## 🔮 Future Features
 
@@ -104,15 +112,10 @@ yarn start
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ## 💖 Acknowledgments
 
 - Made with love for young dreamers
 - Special thanks to all contributors and testers
-- AI story generation powered by [AI Provider Name]
 
 ---
 
